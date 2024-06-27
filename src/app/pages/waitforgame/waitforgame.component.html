@@ -1,0 +1,16 @@
+<div class="page-container">
+    <p class="title">The Avalanche</p>
+    <div class="semi-transparent-container">
+        <div class="container">
+            <span class="description">Please wait for the second player</span>
+        </div>
+        <div class="timer animatable">
+          <svg>
+            <circle cx="50%" cy="50%" r="90"/>
+            <circle cx="50%" cy="50%" r="90" pathLength="1" [style.stroke-dashoffset]="normalizedTime" />
+            <text x="100" y="100" text-anchor="middle"><tspan id="timeLeft" class="description white-text">{{timeLeft}}</tspan></text>
+            <text x="100" y="120" text-anchor="middle" class="description white-text">seconds</text>
+          </svg>
+        </div>
+    </div>
+</div>

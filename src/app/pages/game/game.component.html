@@ -1,0 +1,20 @@
+<div class="page-container">
+  <p class="title">The Avalanche</p>
+  <div>
+    <input type="text" [(ngModel)]="inputField" placeholder="Enter something">
+    <button [disabled]="!isSubmitEnabled" (click)="onSubmit()" class="green-button">Submit</button>
+  </div>
+  <div class="bet-history">
+    <p class="description">Bet History:</p>
+    <ul>
+      <li *ngFor="let bet of betHistory">Bet {{ bet.createdAt }}: {{ bet.amount }}</li>
+    </ul>
+    <p class="description">Total Bet Amount: {{ totalBetAmount }}</p>
+  </div>
+
+  <app-modal *ngIf="showModal" 
+             [title]="modalTitle" 
+             [message]="modalMessage" 
+             (close)="closeModal()">
+  </app-modal>
+</div>
