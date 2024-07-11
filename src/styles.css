@@ -1,56 +1,41 @@
 html, body {
-    height: 100%;
-    margin: 0;
-  }
-  
-  body {
-    /* background: radial-gradient(rgb(15, 18, 89), rgb(29, 35, 50)); */
-    background: radial-gradient(rgb(63, 75, 106),rgb(14, 14, 60));
-    min-height: 100%;
-  }
+  height: 100%;
+  margin: 0;
+}
 
-  .page-container {
-    text-align: center;
-    margin-top: 100px; 
-  }
+.page-container {
+  text-align: center;
+  margin-top: 150px; 
+}
 
-  .title {
-    font-size: 4rem; /* Large size */
-    font-weight: bold; /* Bold weight */
-    color: white;
-    font-family: 'Roboto', sans-serif; 
-    margin: 0;
-    
-    background: linear-gradient(#6b68ff, #3fbaff 47%, #3fdcff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
-  .description{
-    font-weight: bold; 
-    color: white;
-    font-family: 'Roboto', sans-serif; 
-    margin: 0;
-  }
+.title {
+  font-weight: bold; 
+  margin: 0;
+  background: linear-gradient(#d2d1f3, #a7d3ee 47%, #a2dbe8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-  .fontSize1Rem{
-    font-size: 1rem; 
-  }
+.fontRoboto{
+  font-family: 'Roboto', sans-serif; 
+}
 
-  .fontSize3Rem{
-    font-size: 3rem; 
-  }
-  
-  .semi-transparent-container {
-    background-color: rgba(238, 236, 244, 0.2);
-    /* padding: 20px; */
-    border-radius: 10px;
-    padding: 100px 20px;
-    display: inline-block; 
-  }
-  
-  .container{
-    position: relative;
-    top: -50px;
-  }
-  
+.nice_bold_white{
+  font-weight: bold; 
+  color: white;
+  margin: 0;
+}
+
+.fontSize4Rem{
+  font-size: 4rem; 
+}
+
+.fontSize1_3Rem{
+  font-size: 1.3em; 
+}
+
+.fontSize10Px{
+  font-size: 10px; 
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -11,6 +11,7 @@ import { UserService } from '../../services/user.service';
   styleUrl: './welcome.component.css'
 })
 export class WelcomeComponent {
+
   userData: any;
   data: any;
   title:any;
@@ -30,5 +31,11 @@ export class WelcomeComponent {
           this.title=JSON.stringify(error);
         }
       });
+  }
+
+  openRulesDialog() {
+
+console.log("fgh");
+
   }
 }

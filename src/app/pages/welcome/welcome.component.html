@@ -1,10 +1,29 @@
-<div class="page-container">
-    <p class="title">7The Avalanche</p>
-    <span class="description fontSize3Rem">P2P Gambling</span>
-    <div class="page-container">
-        <div>
-            <button class="green-button" (click)="navigateToPlay()">Play</button>
+<div>
+    <div>
+        <div class="top-bar">
+            <div class="left-icon">
+                <div class="imageColor">
+                    <i class="bi bi-coin"></i>
+                    <span class="nice_bold_white fontRoboto fontSize10Px">  Balance</span>
+                </div>
+            </div>
+
+            <div class="right-icon" (click)="openRulesDialog()">
+                <div class="imageColor">
+                    <i class="bi bi-book"></i>
+                    <span class="nice_bold_white fontRoboto fontSize10Px">  Rules</span>
+                </div>
+            </div>
         </div>
     </div>
-    <h2>{{ title }}</h2>
+
+     <div class="page-container">
+        <p class="title fontSize4Rem fontRoboto">The Avalanche</p>
+        <span class="nice_bold_white fontSize1_3Rem fontRoboto">The gamble we deserve</span>
+        <div class="page-container">
+            <div>
+                <button class="btn btn-success btn-sm" (click)="navigateToPlay()">Play</button>
+            </div>
+        </div>
+    </div> 
 </div>
