@@ -1,0 +1,45 @@
+<div #modal class="modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Rules</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="bold">Objective</p>
+          <p>The objective of the game is to be the first player to reach the selected amount (e.g., 10 euros) through strategic betting.</p>
+          <p class="bold">Gameplay</p>
+            <ul>
+                <li class="bold">Turns:</li>
+                <ul>
+                    <li>Players take turns to make their moves.</li>
+                </ul>
+                <li class="bold">Placing Bets:</li>
+                <ul>
+                    <li>On their turn, each player can place a bet.</li>
+                    <li>The bet must be within the following range:</li>
+                    <ul>
+                        <li>Minimum bet: 0.10 euros.</li>
+                        <li>Maximum bet: 15% of the selected amount (e.g., 1.5 euros for a 10 euro game).</li>
+                    </ul>
+                </ul>
+                <li class="bold">Hidden Bets:</li>
+                <ul>
+                    <li>layers only know the bets they place.</li>
+                    <li>Bets are kept hidden from the opponent.</li>
+                </ul>
+            </ul>
+            <p class="bold">Winning the game</p>
+                <ul>
+                    <li>The game continues until one player accumulates the selected amount (e.g., 10 euros) through their bets.</li>
+                    <li>The first player to reach or exceed the selected amount wins the bank (the total of both players' starting amounts).</li>
+                </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

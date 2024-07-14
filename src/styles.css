@@ -26,6 +26,10 @@ html, body {
   margin: 0;
 }
 
+.bold{
+  font-weight: bold; 
+}
+
 .fontSize4Rem{
   font-size: 4rem; 
 }

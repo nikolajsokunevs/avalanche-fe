@@ -1,29 +1,16 @@
 <div>
-    <div>
-        <div class="top-bar">
-            <div class="left-icon">
-                <div class="imageColor">
-                    <i class="bi bi-coin"></i>
-                    <span class="nice_bold_white fontRoboto fontSize10Px">  Balance</span>
-                </div>
-            </div>
-
-            <div class="right-icon" (click)="openRulesDialog()">
-                <div class="imageColor">
-                    <i class="bi bi-book"></i>
-                    <span class="nice_bold_white fontRoboto fontSize10Px">  Rules</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <app-top-bar (openModalEvent)="handleOpenModal()"></app-top-bar>
      <div class="page-container">
         <p class="title fontSize4Rem fontRoboto">The Avalanche</p>
         <span class="nice_bold_white fontSize1_3Rem fontRoboto">The gamble we deserve</span>
         <div class="page-container">
             <div>
-                <button class="btn btn-success btn-sm" (click)="navigateToPlay()">Play</button>
+                <button class="btn btn-success btn-sm" (click)="navigateToPlay()">Play
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                
             </div>
         </div>
     </div> 
+    <app-modal></app-modal>
 </div>

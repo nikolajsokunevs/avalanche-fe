@@ -1,13 +1,22 @@
-<div class="page-container">
-    <p class="title">The Avalanche</p>
-    <div class="semi-transparent-container">
-        <div class="container">
-            <span class="description">Please select the bank</span>
-        </div>
-        <div class="buttons-container">
-            <button class="green-button" (click)="selectBank(2)">2 Euros</button>
-            <button class="green-button" (click)="selectBank(5)">5 Euros</button>
-            <button class="green-button" (click)="selectBank(10)">10 Euros</button>
-        </div>
+<div>
+    <div class="balance_container">
+      <p>Your balance:</p>
+      <h1>{{ formatBalance(balance) }}<i class="bi bi-currency-euro"></i></h1>
     </div>
-</div>
+    <div class="container-select-th">
+      <div class="card-body">
+        <h6>Hi {{ userName }}, choose the threshold</h6>
+      </div>
+  
+      <div class="bs-component">
+        <p>
+          <button class="btn btn-outline-light" (click)="selectBank(2)">2 Euros</button>
+          <button class="btn btn-outline-info" (click)="selectBank(5)">5 Euros</button>
+          <button class="btn btn-outline-success" (click)="selectBank(10)">10 Euros</button>
+        </p>
+      </div>
+      <button class="btn btn-dark btn-lg btn-sm" (click)="addBalance()">Top Up Balance
+        <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>

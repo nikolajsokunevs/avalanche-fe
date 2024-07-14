@@ -5,12 +5,12 @@ import { GameService } from '../../services/game.service';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
-import { ModalComponent } from '../../modal/modal.component';
+
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
 })
