@@ -54,18 +54,6 @@ export class GameService {
     return this.http.get(this.getGameUrl+this.gameData.id);
   }
 
-  // getGame(){
-  //   this.http.get(this.getGameUrl+this.gameData.id).subscribe({
-  //     next: (response) => {
-  //       this.gameData = response;
-  //       console.log('Game data:', this.gameData);
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   });
-  // }
-
   getData(){
     return this.gameData;
   }

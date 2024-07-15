@@ -1,4 +1,5 @@
 <div>
+  <app-top-bar [buttons]="topBarButtons"></app-top-bar>
     <div class="balance_container">
       <p>Your balance:</p>
       <h1>{{ formatBalance(balance) }}<i class="bi bi-currency-euro"></i></h1>
@@ -10,9 +11,9 @@
   
       <div class="bs-component">
         <p>
-          <button class="btn btn-outline-light" (click)="selectBank(2)">2 Euros</button>
-          <button class="btn btn-outline-info" (click)="selectBank(5)">5 Euros</button>
-          <button class="btn btn-outline-success" (click)="selectBank(10)">10 Euros</button>
+          <button class="btn btn-outline-light" (click)="selectBank(2)" [class.disabled]="balance < 2" [disabled]="balance < 2">2 Euros</button>
+          <button class="btn btn-outline-info" (click)="selectBank(5)" [class.disabled]="balance < 5" [disabled]="balance < 5">5 Euros</button>
+          <button class="btn btn-outline-success" (click)="selectBank(10)" [class.disabled]="balance < 10" [disabled]="balance < 10">10 Euros</button>
         </p>
       </div>
       <button class="btn btn-dark btn-lg btn-sm" (click)="addBalance()">Top Up Balance

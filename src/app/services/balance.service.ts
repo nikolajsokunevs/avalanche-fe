@@ -11,11 +11,16 @@ export class BalanceService {
 
   private getBalanceUrl = `${environment.apiUrl}/balance/get/`;
   private addBalanceUrl = `${environment.apiUrl}/balance/add/balance/`;
+  private withdrawalUrl = `${environment.apiUrl}/balance/withdrawal/`;
 
   constructor(private http: HttpClient) { }
 
   getBalance(userId: number): Observable<any> {
     return this.http.get(this.getBalanceUrl + userId);
+  }
+
+  withdrawal(userId: number): Observable<any> {
+    return this.http.get(this.withdrawalUrl + userId);
   }
 
   addBalance(userId: number, amount: number): Observable<any> {

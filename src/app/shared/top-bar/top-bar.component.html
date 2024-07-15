@@ -1,14 +1,8 @@
 <div class="top-bar">
-  <div class="left-icon">
-    <div class="imageColor">
-      <i class="bi bi-coin"></i>
-      <span class="nice_bold_white fontRoboto fontSize10Px">Balance</span>
-    </div>
-  </div>
-  <div class="right-icon" (click)="openModal()">
-    <div class="imageColor">
-      <i class="bi bi-book"></i>
-      <span class="nice_bold_white fontRoboto fontSize10Px">Rules</span>
+  <div class="left-icon" *ngFor="let button of buttons">
+    <div class="imageColor" (click)="handleButtonClick(button.action)">
+      <i class="{{ button.icon }}"></i>
+      <span class="nice_bold_white fontRoboto fontSize10Px">{{ button.text }}</span>
     </div>
   </div>
 </div>

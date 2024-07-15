@@ -3,11 +3,12 @@ import { GameService } from '../../services/game.service';
 import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
+import { CommonModule } from '@angular/common'; 
 
 @Component({
   selector: 'app-wait',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './waitforgame.component.html',
   styleUrl: './waitforgame.component.css'
 })
@@ -18,38 +19,17 @@ export class WaitforgameComponent implements OnInit, OnDestroy {
   normalizedTime: number = 0;
   private checkPlayerSubscription: Subscription;
   private actionTimerIntervalId: any; 
-
+  loading: boolean = true;
   constructor(private router: Router, private gameService: GameService) { }
 
   ngOnInit() {
-    this.startActionTimer();
+    this.loading=true;
     this.waitSecondPlayer();
   }
 
   ngOnDestroy() {
     if (this.checkPlayerSubscription) {
       this.checkPlayerSubscription.unsubscribe();
-    }
-    this.clearActionTimer(); 
-  }
-
- startActionTimer() {
-    this.actionTimerIntervalId = setInterval(() => {
-      if (this.timeLeft > 1) {
-        const timeRemaining = this.timeLeft--;
-        this.normalizedTime = (60 - timeRemaining) / 60;
-        console.log(this.normalizedTime);
-      } else {
-        this.normalizedTime = 1;
-        this.clearActionTimer();
-      }
-    }, 1000);
-  }
-
-  clearActionTimer() {
-    if (this.actionTimerIntervalId) {
-      clearInterval(this.actionTimerIntervalId);
-      this.actionTimerIntervalId = null;
     }
   }
 

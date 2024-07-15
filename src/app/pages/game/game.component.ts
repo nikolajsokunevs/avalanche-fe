@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GameService } from '../../services/game.service';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
-import { interval, Subscription } from 'rxjs';
-
+import { interval, startWith, Subscription } from 'rxjs';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-game',
@@ -15,20 +15,32 @@ import { interval, Subscription } from 'rxjs';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit, OnDestroy {
-  inputField: string = '';
+  @ViewChild('modal') modal: ElementRef;
   isSubmitEnabled: boolean = true;
   betHistory: any[] = [];
   totalBetAmount: number = 0;
-  showModal: boolean = false;
-  modalTitle: string = '';
-  modalMessage: string = '';
-  private checkPlayerSubscription: Subscription;
+  isError: boolean=false;
+  betAmount: number = 0.10;
+  betMax:number = 1.5;
+  modelTitle: string;
+  modelBody: string;
 
   constructor(
     private router: Router,
     private gameService: GameService,
-    private userService: UserService
-  ) { }
+    private userService: UserService) {
+    this.betMax=gameService.getData().threshold*0.15;
+   }
+
+  onRangeChange(event: any) {
+    this.betAmount = event.target.value;
+  }
+
+  isBetAmountInvalid(): boolean {
+    return this.betAmount > this.betMax;
+  }
+
+  private checkPlayerSubscription: Subscription;
 
   ngOnInit() { }
 
@@ -39,27 +51,25 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    const betAmount = parseFloat(this.inputField);
-    if (isNaN(betAmount) || betAmount <= 0) {
-      console.error('Invalid bet amount');
-      return;
-    }
     this.isSubmitEnabled = false;
-
-    this.gameService.placeBet(betAmount).subscribe({
+    this.gameService.placeBet(this.betAmount).subscribe({
       next: (betList) => {
         this.betHistory = betList;
         this.totalBetAmount = this.betHistory.reduce((total, bet) => total + bet.amount, 0);
 
-        this.checkPlayerSubscription = interval(3000).subscribe(() => {
+        this.checkPlayerSubscription = interval(3000).pipe(startWith(0)).subscribe(() => {
           this.gameService.getGame().subscribe({
             next: (response) => {
               const userId = this.userService.getUser().id;
 
               if (response.winner === userId) {
-                this.openModal('YOU WIN', 'Congratulations! You have won the game.');
+                console.log("YOU WIN");
+                this.openModal('YOU WIN', 'Congratulations! You have won the game. Your winnings: '+(this.gameService.getData().bank-this.totalBetAmount));
+                this.checkPlayerSubscription.unsubscribe();
               } else if (response.winner !== null && response.winner !== userId) {
+                console.log("YOU LOSE");
                 this.openModal('YOU LOSE', 'Sorry, you have lost the game.');
+                this.checkPlayerSubscription.unsubscribe();
               } else if (response.nextMoveUser === userId) {
                 console.log("equals");
                 this.isSubmitEnabled = true;
@@ -81,14 +91,19 @@ export class GameComponent implements OnInit, OnDestroy {
     });
   }
 
-  openModal(title: string, message: string) {
-    this.modalTitle = title;
-    this.modalMessage = message;
-    this.showModal = true;
+  openModal(title:string, body:string) {
+    this.modelTitle=title;
+    this.modelBody=body;
+    const modalElement = this.modal.nativeElement;
+    const modalInstance = new Modal(modalElement);
+    modalInstance.show();
   }
 
   closeModal() {
-    this.showModal = false;
     this.router.navigate(['/selectbank']);
+    const modalElement = this.modal.nativeElement;
+    const modalInstance = Modal.getInstance(modalElement);
+    modalInstance.hide();
+
   }
 }

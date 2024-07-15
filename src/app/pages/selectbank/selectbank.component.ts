@@ -4,11 +4,13 @@ import { GameService } from '../../services/game.service';
 import { UserService } from '../../services/user.service';
 import { BalanceService } from '../../services/balance.service';
 import { CommonModule, DecimalPipe } from '@angular/common'; 
+import { TopBarButton } from '../../shared/top-bar/top-bar-button.model';
+import { TopBarComponent } from '../../shared/top-bar/top-bar.component';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TopBarComponent],
   templateUrl: './selectbank.component.html',
   styleUrl: './selectbank.component.css',
   providers: [DecimalPipe]
@@ -17,28 +19,43 @@ export class SelectBankComponent implements OnInit {
   userName: string = "USER_NAME";
   balance: number = 0;
   loading: boolean = false;
+  topBarButtons: TopBarButton[];
 
   constructor(private router: Router, 
     private userService:UserService, 
     private gameService:GameService,
     private balanceService: BalanceService,
-    private decimalPipe: DecimalPipe) {}
-
-  // ngOnInit() {
-  //   this.userName = this.userService.getUser().name;
-  //   this.getBalance();
-  // }
+    private decimalPipe: DecimalPipe) {
+      this.updateTopBarButtons();
+    }
 
   ngOnInit() {
-    this.userName = "defrt";
-    this.balance=4567;
+    this.userName = this.userService.getUser().name;
+    this.getBalance();
   }
+
+  // ngOnInit() {
+  //   this.userName = "defrt";
+  //   this.balance=4567;
+  // }
 
   getBalance() {
     const userId = this.userService.getUser().id;
     this.balanceService.getBalance(userId).subscribe({
       next: (response: any) => {
-        this.balance = response.balance; // Assuming the response contains a balance property
+        this.balance = response.balance;
+      },
+      error: (error: any) => {
+        console.error('Error fetching balance', error);
+      }
+    });
+  }
+
+  withdrawal() {
+    const userId = this.userService.getUser().id;
+    this.balanceService.withdrawal(userId).subscribe({
+      next: (response: any) => {
+        this.balance = response.balance; 
       },
       error: (error: any) => {
         console.error('Error fetching balance', error);
@@ -61,12 +78,26 @@ export class SelectBankComponent implements OnInit {
     });
   }
 
-    selectBank(value:number) {
-      this.gameService.startNewGame(value, this.userService.getUser().id);
-      this.router.navigate(['/waitforgame']);
-    }
+  selectBank(value:number) {
+    this.gameService.startNewGame(value, this.userService.getUser().id);
+    this.router.navigate(['/waitforgame']);
+  }
 
-    formatBalance(balance: number): string {
-      return this.decimalPipe.transform(balance, '1.2-2'); // Format to 2 decimal places
-    }
+  formatBalance(balance: number): string {
+    return this.decimalPipe.transform(balance, '1.2-2'); // Format to 2 decimal places
+  }
+
+  updateTopBarButtons() {
+    this.topBarButtons = [
+      {
+        icon: 'bi bi-credit-card',
+        text: 'Withdrawal',
+        action: () => this.withdrawal()
+      }, {
+        icon: 'bi bi-list-ul',
+        text: 'History',
+        action: () =>  console.log('History clicked')
+      }
+    ];
+}
 }

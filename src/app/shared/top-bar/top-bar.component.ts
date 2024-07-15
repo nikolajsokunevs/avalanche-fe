@@ -1,15 +1,19 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TopBarButton } from './top-bar-button.model';
 
 @Component({
   selector: 'app-top-bar',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './top-bar.component.html',
   styleUrls: ['./top-bar.component.css']
 })
 export class TopBarComponent {
-  @Output() openModalEvent = new EventEmitter<void>();
 
-  openModal() {
-    this.openModalEvent.emit();
+  @Input() buttons: TopBarButton[] = [];
+
+  handleButtonClick(action: () => void) {
+    action();
   }
 }
