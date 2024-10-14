@@ -25,4 +25,8 @@ export class TelegramService {
       throw new Error('User data not found in initData');
     }
   }
+
+  getInitData(): String{
+    return this.tg.initData;
+  }
 }

@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { TelegramService } from './telegram.service';
 import { environment } from '../../environments/environment'; 
 import { Observable } from 'rxjs';
 @Injectable({
@@ -11,7 +12,9 @@ export class UserService {
   private data;
   private apiUrl = `${environment.apiUrl}/user/create`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private telegramService: TelegramService
+  ) { }
 
   createUser(name: string, userName: string, chatId: number): Observable<any> {
     const body = {
@@ -19,6 +22,14 @@ export class UserService {
       userName: userName,
       chatId: chatId
     };
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Verification-Token': 'your-verification-token' // replace with actual token
+    });
+
+    console.log("defrgth")
+    console.log(this.telegramService.getInitData())
 
     return this.http.post(this.apiUrl, body);
   }
@@ -30,5 +41,4 @@ export class UserService {
   setUser(user:any){
     this.data=user;
   }
-
 }
