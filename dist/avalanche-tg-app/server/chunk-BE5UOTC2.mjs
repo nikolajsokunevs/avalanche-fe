@@ -1,2 +1,0 @@
-import './polyfills.server.mjs';
-import{E as a,F as i,f as n,n as r,o as p}from"./chunk-REI7VGFQ.mjs";var s=(()=>{let t=class t{constructor(){this.title="avalanche-tg-app"}};t.\u0275fac=function(o){return new(o||t)},t.\u0275cmp=n({type:t,selectors:[["app-root"]],standalone:!0,features:[p],decls:1,vars:0,template:function(o,l){o&1&&r(0,"router-outlet")},dependencies:[i],encapsulation:2});let e=t;return e})();var m=()=>a(s),g=m;export{g as a};
