@@ -1,0 +1,47 @@
+# Angular specific
+/node_modules/
+/dist/
+.angular/
+/out-tsc/
+/coverage/
+
+# Compiled output
+*.js
+*.jsx
+*.map
+*.tsbuildinfo
+
+# Temporary files
+.tmp/
+temp/
+*.tmp
+
+# Logs and debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/.idea/
+/.vscode/
+/*.sublime-workspace
+
+# Dependency directories
+/bower_components/
+/jspm_packages/
+
+# IDE and editor settings
+/.idea/
+/.project
+/.classpath
+/.c9/
+/*.launch
+/settings
+/.vscode/
+/.sublime-workspace
+.sublime-project
+
+# Other
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+x
