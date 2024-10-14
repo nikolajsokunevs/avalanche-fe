@@ -22,15 +22,7 @@ export class UserService {
       userName: userName,
       chatId: chatId
     };
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Verification-Token': 'your-verification-token' // replace with actual token
-    });
-
-    console.log("defrgth")
-    console.log(this.telegramService.getInitData())
-
+    
     return this.http.post(this.apiUrl, body);
   }
 
