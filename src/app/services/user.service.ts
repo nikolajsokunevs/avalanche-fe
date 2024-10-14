@@ -12,9 +12,7 @@ export class UserService {
   private data;
   private apiUrl = `${environment.apiUrl}/user/create`;
 
-  constructor(private http: HttpClient,
-    private telegramService: TelegramService
-  ) { }
+  constructor(private http: HttpClient) { }
 
   createUser(name: string, userName: string, chatId: number): Observable<any> {
     const body = {
@@ -22,7 +20,7 @@ export class UserService {
       userName: userName,
       chatId: chatId
     };
-    
+
     return this.http.post(this.apiUrl, body);
   }
 
