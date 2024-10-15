@@ -40,7 +40,7 @@ export class WelcomeComponent {
       this.userData = this.telegramService.getUserData();
       this.title = this.userData.id;
       this.userService.createUser(this.userData.first_name + " " + this.userData.last_name, this.userData.last_name, this.userData.id).subscribe({
-       // this.userService.createUser( " " , "this.userData.last_name", 45686).subscribe({
+      //this.userService.createUser( " " , "this.userData.last_name", 45686).subscribe({
          
       next: (response) => {
           this.userService.setUser(response);
