@@ -34,11 +34,6 @@ export class SelectBankComponent implements OnInit {
     this.getBalance();
   }
 
-  // ngOnInit() {
-  //   this.userName = "defrt";
-  //   this.balance=4567;
-  // }
-
   getBalance() {
     const userId = this.userService.getUser().id;
     this.balanceService.getBalance(userId).subscribe({
@@ -79,7 +74,7 @@ export class SelectBankComponent implements OnInit {
   }
 
   selectBank(value:number) {
-    this.gameService.startNewGame(value, this.userService.getUser().id);
+    this.gameService.startNewGame(value, this.userService.getUser().chatId);
     this.router.navigate(['/waitforgame']);
   }
 

@@ -5,9 +5,9 @@
       <input type="number" class="form-control" id="betInput" aria-describedby="betHelp" placeholder="0.00"
       [(ngModel)]="betAmount" [ngClass]="{'is-invalid': isBetAmountInvalid()}" min="0.10" max="1.50" step="0.01">
       <div *ngIf="isBetAmountInvalid()" class="invalid-feedback">
-        The bet amount cannot exceed 1.50 euros.
+        The bet amount cannot exceed 15% of threshold.
       </div>
-      <input type="range" class="form-range" id="customRange1" min="0.10" max="1.50" step="0.01"
+      <input type="range" class="form-range" id="customRange1" min="0.10" [max]="betMax" step="0.01"
       [(ngModel)]="betAmount" (input)="onRangeChange($event)">
       <div class="d-grid gap-2">
               <button class="btn btn-lg btn-dark"  [ngClass]="{'disabled': !isSubmitEnabled||isBetAmountInvalid()}" type="button" (click)="onSubmit()">Place a bet</button>
@@ -34,7 +34,6 @@
       <div class="modal-body">
         <p>{{modelBody}}</p>
       </div>
-      
     </div>
   </div>
 </div>

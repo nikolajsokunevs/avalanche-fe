@@ -27,20 +27,11 @@ export class WelcomeComponent {
               this.updateTopBarButtons();
               }
 
-              // navigateToPlay() {
-              //   this.loading = true;
-              //   setTimeout(() => {
-              //     this.router.navigate(['/selectbank']);
-              //     this.loading = false;
-              //   }, 1000);
-              // }
-
   navigateToPlay() {
       this.loading = true; 
       this.userData = this.telegramService.getUserData();
       this.title = this.userData.id;
       this.userService.createUser(this.userData.first_name + " " + this.userData.last_name, this.userData.last_name, this.userData.id).subscribe({
-      //this.userService.createUser( " " , "this.userData.last_name", 45686).subscribe({
          
       next: (response) => {
           this.userService.setUser(response);

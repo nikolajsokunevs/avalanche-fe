@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { GameService } from '../../services/game.service';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
-import { interval, startWith, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Modal } from 'bootstrap';
 
 @Component({
@@ -16,21 +16,38 @@ import { Modal } from 'bootstrap';
 })
 export class GameComponent implements OnInit, OnDestroy {
   @ViewChild('modal') modal: ElementRef;
-  isSubmitEnabled: boolean = true;
+  modalInstance: Modal | null = null; 
+  isSubmitEnabled: boolean = false;
+  private subscription!: Subscription;
   betHistory: any[] = [];
   totalBetAmount: number = 0;
   isError: boolean=false;
   betAmount: number = 0.10;
-  betMax:number = 1.5;
+  betMax: number;
   modelTitle: string;
   modelBody: string;
 
   constructor(
     private router: Router,
     private gameService: GameService,
-    private userService: UserService) {
-    this.betMax=gameService.getData().threshold*0.15;
+    private userService: UserService
+  ) {
+    this.isSubmitEnabled=this.gameService.yourMove;
+    this.betMax=this.gameService.threshold*0.15;
+    this.betAmount = this.calculateInitialBetAmount(this.gameService.threshold);
    }
+
+   calculateInitialBetAmount(threshold: number): number {
+    if (threshold === 2) {
+      return 0.20;
+    } else if (threshold === 5) {
+      return 0.45;
+    } else if (threshold === 10) {
+      return 0.90;
+    } else {
+      return 0.10; // Default minimum bet amount
+    }
+  }
 
   onRangeChange(event: any) {
     this.betAmount = event.target.value;
@@ -40,49 +57,36 @@ export class GameComponent implements OnInit, OnDestroy {
     return this.betAmount > this.betMax;
   }
 
-  private checkPlayerSubscription: Subscription;
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.subscription=this.gameService.getSubsequentMessages$().subscribe(message => {
+      var gameUpdate=JSON.parse(message);
+      console.log('Message received: ', gameUpdate);
+      this.isSubmitEnabled =  gameUpdate.yourMove;
+
+      if (gameUpdate.inProgress === false && gameUpdate.win === true) {
+                 this.openModal('YOU WIN', 'Congratulations! You have won the game. Your winnings: '+(gameUpdate.winAmount));
+                 this.gameService.disconnect();
+               } else if (gameUpdate.inProgress === false && gameUpdate.win === false) {
+                 this.openModal('YOU LOSE', 'Sorry, you have lost the game.');
+                 this.gameService.disconnect();
+               } else {
+                 this.isSubmitEnabled = gameUpdate.yourMove;
+               }
+    });
+  }
 
   ngOnDestroy() {
-    if (this.checkPlayerSubscription) {
-      this.checkPlayerSubscription.unsubscribe();
-    }
+    this.subscription.unsubscribe()
+    this.modalInstance?.dispose();
+    this.modalInstance=null;
   }
 
   onSubmit() {
     this.isSubmitEnabled = false;
-    this.gameService.placeBet(this.betAmount).subscribe({
+    this.gameService.placeBet(this.betAmount, this.userService.getUser().chatId).subscribe({
       next: (betList) => {
-        this.betHistory = betList;
-        this.totalBetAmount = this.betHistory.reduce((total, bet) => total + bet.amount, 0);
-
-        this.checkPlayerSubscription = interval(3000).pipe(startWith(0)).subscribe(() => {
-          this.gameService.getGame().subscribe({
-            next: (response) => {
-              const userId = this.userService.getUser().id;
-
-              if (response.winner === userId) {
-                console.log("YOU WIN");
-                this.openModal('YOU WIN', 'Congratulations! You have won the game. Your winnings: '+(this.gameService.getData().bank-this.totalBetAmount));
-                this.checkPlayerSubscription.unsubscribe();
-              } else if (response.winner !== null && response.winner !== userId) {
-                console.log("YOU LOSE");
-                this.openModal('YOU LOSE', 'Sorry, you have lost the game.');
-                this.checkPlayerSubscription.unsubscribe();
-              } else if (response.nextMoveUser === userId) {
-                console.log("equals");
-                this.isSubmitEnabled = true;
-                if (this.checkPlayerSubscription) {
-                  this.checkPlayerSubscription.unsubscribe();
-                }
-              }
-            },
-            error: (error) => {
-              console.error('Error getting game:', error);
-            }
-          });
-        });
+        console.log('Bet was set');
       },
       error: (error) => {
         console.error('Error placing bet:', error);
@@ -94,16 +98,20 @@ export class GameComponent implements OnInit, OnDestroy {
   openModal(title:string, body:string) {
     this.modelTitle=title;
     this.modelBody=body;
-    const modalElement = this.modal.nativeElement;
-    const modalInstance = new Modal(modalElement);
-    modalInstance.show();
+    if (!this.modalInstance) {
+      this.modalInstance = new Modal(this.modal.nativeElement);
+    }
+    this.modalInstance.show();
   }
 
   closeModal() {
+    this.modelTitle=null;
+    this.modelBody=null;
+    if (this.modalInstance) {
+      this.modalInstance.hide(); 
+      this.modalInstance.dispose(); 
+      this.modalInstance = null;
+    }
     this.router.navigate(['/selectbank']);
-    const modalElement = this.modal.nativeElement;
-    const modalInstance = Modal.getInstance(modalElement);
-    modalInstance.hide();
-
   }
 }

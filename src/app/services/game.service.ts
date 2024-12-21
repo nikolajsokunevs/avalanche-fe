@@ -1,33 +1,41 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable, tap } from 'rxjs';
+import { Client } from '@stomp/stompjs';  
+import SockJS from 'sockjs-client';
+import { Observable, Subject, tap } from 'rxjs';
+import { UserService } from './user.service';
+import { createAuthHeaders } from '../utils/headerUtils';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
 
-  private gameData;
+  private client: Client | null = null; // Store the client as a class property
   private betList;
+  public yourMove: boolean = false; 
+  public threshold: number; 
   private startNewGameUrl = `${environment.apiUrl}/game/start-new-game`;
-  private getGameUrl = `${environment.apiUrl}/game/game/`;
   private placeBetUrl = `${environment.apiUrl}/game/place-a-bet`;
 
-  constructor(private http: HttpClient) { }
+  private firstMessageSubject = new Subject<string>();
+  private subsequentMessageSubject = new Subject<string>();
+  private isFirstMessage = true;
 
+  constructor(private http: HttpClient, private userService: UserService, @Inject(DOCUMENT) private document: Document) {}
 
-  startNewGame(threshold: number, userId: number){
-     const body = 
-     {
-      user1Id: userId,
+  async startNewGame(threshold: number, userId: number) {
+    await this.subscribe();
+    const body = {
+      player: userId,
       threshold: threshold
-     };
+    };
 
-     this.http.post(this.startNewGameUrl, body).subscribe({
-      next: (response) => {
-        this.gameData = response;
-        console.log('Game created:', this.gameData);
+    this.http.post(this.startNewGameUrl, body).subscribe({
+      next: () => {
+        console.log('Request to create a game has been sent successfully:');
       },
       error: (error) => {
         console.error('Error fetching data:', error);
@@ -35,10 +43,49 @@ export class GameService {
     });
   }
 
-  placeBet(bet: number): Observable<any> {
+  subscribe(): Promise<void> {
+    console.log("connect to ws")
+    return new Promise((resolve, reject) => {
+      this.client = new Client({
+        webSocketFactory: () => new SockJS(`${environment.webSocketUrl}`),
+        reconnectDelay: 5000
+      });
+
+      this.client.onConnect = (frame) => {
+
+        const headers = createAuthHeaders(document);
+
+        this.client!.subscribe(`/topic/status/${this.userService.getUser().chatId}`, (message) => {
+          console.log('Message: ', message.body);
+          if (this.isFirstMessage) {
+            this.firstMessageSubject.next(message.body);
+            this.isFirstMessage = false; 
+          } else {
+            this.subsequentMessageSubject.next(message.body);
+          }
+        }, headers);
+        resolve(); 
+      };
+
+      this.client.onStompError = (frame) => {
+        console.error('STOMP error:', frame);
+        reject(frame);
+      };
+      this.client.activate();
+    });
+  }
+
+  getFirstMessage$() {
+    return this.firstMessageSubject.asObservable();
+  }
+
+  getSubsequentMessages$() {
+    return this.subsequentMessageSubject.asObservable();
+  }
+
+  placeBet(bet: number, userId: number): Observable<any> {
     const body = {
-      gameId: this.gameData.id,
-      userId: this.gameData.nextMoveUser,
+      player: userId,
       amount: bet
     };
 
@@ -50,12 +97,13 @@ export class GameService {
     );
   }
 
-  getGame(): Observable<any> {
-    return this.http.get(this.getGameUrl+this.gameData.id);
+  disconnect(): void {
+    this.isFirstMessage=true;
+    if (this.client && this.client.connected) {
+      this.client.deactivate();
+      console.log('WebSocket connection closed');
+    } else {
+      console.log('WebSocket connection is not active');
+    }
   }
-
-  getData(){
-    return this.gameData;
-  }
-
 }
