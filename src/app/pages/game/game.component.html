@@ -10,7 +10,7 @@
       <input type="range" class="form-range" id="customRange1" min="0.10" [max]="betMax" step="0.01"
       [(ngModel)]="betAmount" (input)="onRangeChange($event)">
       <div class="d-grid gap-2">
-              <button class="btn btn-lg btn-dark"  [ngClass]="{'disabled': !isSubmitEnabled||isBetAmountInvalid()}" type="button" (click)="onSubmit()">Place a bet</button>
+              <button class="button btn btn-lg btn-dark"  [ngClass]="{'disabled': !isSubmitEnabled||isBetAmountInvalid()}" type="button" (click)="onSubmit()">Place a bet</button>
       </div>
   </fieldset>
 </div>
