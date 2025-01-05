@@ -105,6 +105,7 @@ export class GameComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (betList) => {
           console.log("Bet was set");
+          this.totalBetAmount=this.totalBetAmount+this.betAmount;
         },
         error: (error) => {
           console.error("Error placing bet:", error);

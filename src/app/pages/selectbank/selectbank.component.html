@@ -11,13 +11,14 @@
   
       <div class="bs-component">
         <p>
-          <button class="btn btn-outline-light" (click)="selectBank(2)" [class.disabled]="balance < 2" [disabled]="balance < 2">2 Euros</button>
-          <button class="btn btn-outline-info" (click)="selectBank(5)" [class.disabled]="balance < 5" [disabled]="balance < 5">5 Euros</button>
-          <button class="btn btn-outline-success" (click)="selectBank(10)" [class.disabled]="balance < 10" [disabled]="balance < 10">10 Euros</button>
+          <button class="btn disabled btn-outline-secondary" (click)="selectBank(2)" [class.disabled]="balance < 2" [disabled]="balance < 2">2 Euros</button>
+          <button class="btn btn-outline-success" (click)="selectBank(5)" [class.disabled]="balance < 5" [disabled]="balance < 5">5 Euros</button>
+          <button class="btn disabled btn-outline-secondary" (click)="selectBank(10)" [class.disabled]="balance < 10" [disabled]="balance < 10">10 Euros</button>
         </p>
       </div>
       <button class="btn btn-dark btn-lg btn-sm" (click)="addBalance()">Top Up Balance
         <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       </button>
     </div>
+    <app-modal></app-modal>
   </div>
